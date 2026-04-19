@@ -2,7 +2,10 @@ from typing import Protocol
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
+from .utils import APIClient
+
 # quantization config to optimize large 7B models for 16GB VRAM
+# reduces model size with minimal different in output
 quant_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_compute_dtype=torch.float16,
@@ -29,6 +32,9 @@ class LocalExecutor(LLMExecutor):
         return decoded
 
 class APIExecutor(LLMExecutor):
+    def __init__(self, model_id: str, api_client: APIClient):
+        self._model = model_id
+        self._api_client = api_client # allows user to share API clients across code base when injected
+
     def execute(self, conversation, max_tokens: int = 36) -> str:
-        # TODO: Implement
-        pass
+        return self._api_client.call_api(self._model, conversation,max_tokens)
