@@ -1,5 +1,8 @@
 # judgellm
+
 Pip Library for utilising various LLM's as a classifier judge for AI-Safety
+
+See [DESIGN.md](DESIGN.md) for information regarding the design desicions of this library. 
 
 ## Output Labels
 
