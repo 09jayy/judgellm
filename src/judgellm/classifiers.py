@@ -4,7 +4,8 @@ import re
 import json
 
 from .constants import JudgeLabel, ModelConfig, TEMPLATES
-from .executors import LLMExecutor
+from .executors import LLMExecutor, LocalExecutor, APIExecutor
+from .utils import APIClient
 
 class Classifier(Protocol):
     
@@ -14,10 +15,29 @@ class Classifier(Protocol):
     def _parse_label(self, raw_text: str) -> JudgeLabel:
         ...
 
+    @classmethod
+    def from_local(cls, model_id: str):
+        """ Simple local execution construction for a classifier """
+        ...
+
+    @classmethod
+    def from_api(cls, api_client: APIClient, model_id: str):
+        """ Simple API execution construction for a classifier """
+        ... 
+
 class WildGuard(Classifier):
     def __init__(self, executor: LLMExecutor, config: ModelConfig = None):
         self._config = config
         self._executor = executor
+
+    def from_local(cls, model_id: str = "allenai/wildguard"):
+        _config = ModelConfig(model_id=model_id, template=TEMPLATES["wildguard"])
+        _executor = LocalExecutor(model_id=model_id)
+        return cls(_config, _executor)
+
+    def from_api(cls, api_client: APIClient, model_id: str = "allenai/wildguard"):
+        # TODO: implement
+        raise NotImplementedError()
 
     def classify(self, prompt: str, response: str) -> JudgeLabel:
         if self._config.template:  
@@ -57,6 +77,15 @@ class GPT3_5(Classifier):
         self._config = config if config else ModelConfig(model_id="openai/gpt-3.5-turbo",template=TEMPLATES["GENERIC"])
         self._executor = executor
     
+    def from_local(cls, model_id: str = "openai/gpt-3.5-turbo"):
+        # TODO: implement
+        raise NotSupportedByModel("OpenAI GPT does not support locally hosting LLMs")
+
+    def from_api(cls, api_client: APIClient = None, model_id: str = "openai/gpt-3.5-turbo"):
+        _config = ModelConfig(model_id="openai/gpt-3.5-turbo", template=TEMPLATES["GENERIC"]),
+        _executor = APIExecutor(model_id="openai/gpt-3.5-turbo",api_client=api_client)
+        return cls(_config, _executor)
+
     def classify(self, prompt: str, response: str) -> JudgeLabel:
         
         conversation = [
@@ -91,3 +120,6 @@ class GPT3_5(Classifier):
         except (json.JSONDecodeError, TypeError, KeyError):
             # Fallback if the LLM garbles the JSON
             return JudgeLabel.NOT_HARMFUL
+        
+class NotSupportedByModel(Exception):
+    pass
