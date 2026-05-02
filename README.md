@@ -16,6 +16,12 @@ See [utils.py](src/judgellm/utils.py) for `JudgeLabel` enum.
 
 See [simple_judge.py](examples/simple_judge.py) and [simple_api_judge.py](examples/simple_api_judge.py)
 
+### Define Environment Variables
+
+```bash
+# .env
+API_KEY=<insert-api-key>
+```
 
 ### Local Classification
 
