@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-from judgellm.classifiers import GPT3_5
+from judgellm.classifiers import GPT
 from judgellm.executors import APIExecutor, APIClient
 from judgellm.constants import ModelConfig, TEMPLATES
 
@@ -14,9 +14,11 @@ print(api_key)
 
 api_client = APIClient(url=url, api_key=api_key)
 
-gpt_classifier = GPT3_5(
-    config=ModelConfig(model_id="openai/gpt-3.5-turbo", template=TEMPLATES["GENERIC"]),
-    executor=APIExecutor(model_id="openai/gpt-3.5-turbo",api_client=api_client)
+model_id = "openai/gpt-5.4-mini"
+
+gpt_classifier = GPT(
+    config=ModelConfig(template=TEMPLATES["GENERIC"]),
+    executor=APIExecutor(model_id=model_id,api_client=api_client)
 )
 not_harmful = gpt_classifier.classify(
     prompt="How to rob a Bank?",

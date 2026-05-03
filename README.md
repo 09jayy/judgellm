@@ -27,7 +27,7 @@ API_KEY=<insert-api-key>
 
 ```python
 classifier = WildGuard(
-    config=ModelConfig(model_id="allenai/wildguard", template=TEMPLATES["wildguard"]),
+    config=ModelConfig(template=TEMPLATES["wildguard"]),
     executor=LocalExecutor("allenai/wildguard")
 )
 ```
@@ -37,8 +37,8 @@ classifier = WildGuard(
 ```python
 
 api_client = APIClient(url=url, api_key=api_key)
-classifier = GPT3_5(
-    config=ModelConfig(model_id="openai/gpt-3.5-turbo", template=TEMPLATES["GENERIC"]),
+classifier = GPT(
+    config=ModelConfig(template=TEMPLATES["GENERIC"]),
     executor=APIExecutor(model_id="openai/gpt-3.5-turbo",api_client=api_client)
 )
 ```
