@@ -3,7 +3,7 @@ from judgellm.executors import LocalExecutor
 from judgellm.constants import ModelConfig, TEMPLATES
 
 wildguard_classifier = WildGuard(
-    config=ModelConfig(model_id="allenai/wildguard", template=TEMPLATES["wildguard"]),
+    config=ModelConfig(template=TEMPLATES["wildguard"]),
     executor=LocalExecutor("allenai/wildguard")
 )
 
