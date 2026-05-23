@@ -1,5 +1,5 @@
 [project]
-name = "judgellm"
+name = "v-judgellm"
 version = "0.1.0"
 description = "Utilise various LLM as a Judge for Classification"
 readme = "README.md"
