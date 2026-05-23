@@ -20,9 +20,9 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/checkout@v4
+      uses: actions/setup-python@v5
       with:
-        python-node: '3.x'
+        python-version: '3.x'
 
     - name: Install build tools
       run: |
@@ -33,4 +33,4 @@ jobs:
       run: python -m build
 
     - name: Publish package to PyPI
-      uses: pypa/gh-action-pypis-publisher@v1.12.4
+      uses: pypa/gh-action-pypi-publish@release/v1
